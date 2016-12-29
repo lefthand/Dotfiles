@@ -11,7 +11,6 @@ colorscheme benokai
 
 iabbrev adn and
 iabbrev cf cloudformation
-iabbrev @@ lefthand@gmail.com
 
 " }}}
 "~~~~~~~~~~~~~~~~  COMMANDS ~~~~~~~~~~~~~~~~~ {{{
@@ -53,7 +52,6 @@ augroup helpers
   autocmd FileType python     :iabbrev <buffer> iff if:<left>
   autocmd FileType javascript :iabbrev <buffer> iff if ()<left>
   autocmd FileType ruby       :iabbrev <buffer> iff if
-  autocmd FileType ruby       :iabbrev <buffer> what is
 augroup END
 
 augroup filetype_vim

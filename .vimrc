@@ -98,10 +98,17 @@ set complete-=k complete+=k
 " }}}
 "~~~~~~~~~~~~~~~~  MAPPINGS ~~~~~~~~~~~~~~~~~ {{{
 
+nnoremap <Leader>r :set relativenumber!<cr>
+nnoremap / /\v
+nnoremap ? ?\v
+
+" Hightlight Markdown headings
 onoremap ih :<c-u>execute "normal! ?^[=-]\\{2,\\}$\r:nohlsearch\rkvg_"<cr>
 onoremap ah :<c-u>execute "normal! ?^[=-]\\{2,\\}$\r:nohlsearch\rg_vk0"<cr>
 
+" Inside of a paren
 onoremap p i(
+" Till the next return
 onoremap b /return<cr>
 onoremap in( :<c-u>normal! f(vi(<cr>
 onoremap il( :<c-u>normal! F)vi(<cr>
@@ -121,7 +128,10 @@ noremap <Leader>c :s/^\/\/\\|^--\\|^> \\|^[#"%!;]//<CR>
 noremap <Leader>* :s/^\(.*\)$/\/\* \1 \*\//<CR>
 noremap <Leader>( :s/^\(.*\)$/\(\* \1 \*\)/<CR>
 noremap <Leader>< :s/^\(.*\)$/<!-- \1 -->/<CR>
-noremap <Leader>d :s/^\([/(]\*\\|<!--\) \(.*\) \(\*[/)]\\|-->\)$/\2/<CR>
+noremap <Leader>h :s/^\([/(]\*\\|<!--\) \(.*\) \(\*[/)]\\|-->\)$/\2/<CR>
+
+" Not really helpful, but shows how to breakup undo blocks
+nnoremap <leader>d dd:let &undolevels=&undolevels-1<cr>dd
 
 " Move current line up / down
 noremap - ddp
@@ -143,11 +153,11 @@ nnoremap <leader>' viw<esc>a'<esc>hbi'<esc>lel
 vnoremap <leader>" <esc>`<i"<esc>`>a"<esc>
 vnoremap <leader>' <esc>`<i'<esc>`>a'<esc>
 
-" Edit vimrc
+" Edit / source vimrc
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
-nnoremap <F2> :set invpaste paste?<CR>
+nnoremap <Local>v :set invpaste paste?<CR>
 set pastetoggle=<F2>
 
 nnoremap <Up> <nop>
@@ -194,12 +204,12 @@ Plug 'garbas/vim-snipmate'
 Plug 'vadv/vim-chef'
 
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
 Plug 'scrooloose/syntastic'
+Plug 'scrooloose/nerdtree'
 Plug 'avakhov/vim-yaml'
 Plug 'kchmck/vim-coffee-script'
 Plug 'itchyny/lightline.vim'
-Plug 'scrooloose/nerdtree'
-Plug 'tpope/vim-surround'
 "Plug 'wookiehangover/jshint.vim'
 call plug#end()
 
@@ -305,6 +315,20 @@ augroup END
 function! s:syntastic()
   SyntasticCheck
   call lightline#update()
+endfunction
+
+nnoremap <leader>q :call <SID>QuickfixToggle()<cr>
+let g:quickfix_is_open = 0
+function! s:QuickfixToggle()
+    if g:quickfix_is_open
+        cclose
+        let g:quickfix_is_open = 0
+        execute g:quickfix_return_to_window . "wincmd w"
+    else
+        let g:quickfix_return_to_window = winnr()
+        copen
+        let g:quickfix_is_open = 1
+    endif
 endfunction
 
 " }}}

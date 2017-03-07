@@ -32,13 +32,6 @@ command! Wq wq
 cno sudow w !sudo tee % >/dev/null
 command! Sudow w !sudo tee % >/dev/null
 
-augroup cloudformationLint
-  autocmd!
-" Only execute if in ~/Code/cloudformation
-" Handle output, if json, ignore. Print otherwise
-autocmd BufWritePre *.yml :! aws cloudformation validate-template --template-body file://%
-augroup END
-
 augroup insertComments
   autocmd!
   autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>

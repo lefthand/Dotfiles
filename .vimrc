@@ -24,10 +24,16 @@ augroup stripTrailingSpace
   autocmd BufWritePre * :%s/\s\+$//e
 augroup END
 
+augroup buildGo
+  autocmd!
+  autocmd BufWritePost *.go :GoBuild!
+augroup END
+
 "some common typos
 command! Q  quit
 command! W  write
 command! Wq wq
+command! Tabe tabe
 
 cno sudow w !sudo tee % >/dev/null
 command! Sudow w !sudo tee % >/dev/null
@@ -35,6 +41,7 @@ command! Sudow w !sudo tee % >/dev/null
 augroup insertComments
   autocmd!
   autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
+  autocmd FileType go         nnoremap <buffer> <localleader>c I//<esc>
   autocmd FileType python     nnoremap <buffer> <localleader>c I#<esc>
   autocmd FileType ruby       nnoremap <buffer> <localleader>c I"<esc>
   autocmd FileType vim        nnoremap <buffer> <localleader>c I"<esc>
@@ -45,13 +52,13 @@ augroup helpers
   autocmd FileType python     :iabbrev <buffer> iff if:<left>
   autocmd FileType javascript :iabbrev <buffer> iff if ()<left>
   autocmd FileType ruby       :iabbrev <buffer> iff if
+  autocmd FileType go         :iabbrev <buffer> iff if {<left>
 augroup END
 
 augroup filetype_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
 augroup END
-
 
 " }}}
 "~~~~~~~~~~~~~~~~  SETTINGS ~~~~~~~~~~~~~~~~~ {{{
@@ -61,6 +68,8 @@ let php_sql_query=1
 let php_htmlInStrings=1
 let php_folding = 2
 let javascript_folding = 2
+" My version is higher than the required version, it still throws an error
+let g:go_version_warning = 0
 
 "Tab Stuff
 set expandtab
@@ -86,6 +95,13 @@ set noshowmode
 "Set the dictionary and allow autocomplete
 "set dictionary-=/usr/share/dict/words dictionary+=/usr/share/dict/words
 set complete-=k complete+=k
+
+"Show autocomplete options above command line
+set wildmenu
+" Don't offer to open certain files/directories
+set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
+set wildignore+=*.pdf,*.psd
+set wildignore+=node_modules/*,bower_components/*
 
 
 " }}}
@@ -203,6 +219,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'avakhov/vim-yaml'
 Plug 'kchmck/vim-coffee-script'
 Plug 'itchyny/lightline.vim'
+Plug 'fatih/vim-go'
 "Plug 'wookiehangover/jshint.vim'
 call plug#end()
 
